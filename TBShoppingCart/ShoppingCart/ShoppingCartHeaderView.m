@@ -8,6 +8,7 @@
 
 #import "ShoppingCartHeaderView.h"
 #import "UIView+XL.h"
+#import "ShoppingCartModel.h"
 
 @interface ShoppingCartHeaderView ()
 
@@ -49,7 +50,6 @@
     
     [self.selectButton setImage:[UIImage imageNamed:@"weixuanze"] forState:UIControlStateNormal];
     [self.selectButton setImage:[UIImage imageNamed:@"yixuanze"] forState:UIControlStateSelected];
-    self.selectButton.selected = self.select;
     [self.selectButton addTarget:self action:@selector(selectButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.selectButton];
@@ -74,13 +74,12 @@
     }
 }
 
-//- (void)setSelect:(BOOL)select{
-//
-//    _select = select;
-//    
-//    self.selectButton.selected = select;
-//
-//}
+- (void)setModel:(ShoppingCartModel *)model{
+
+    _model = model;
+    
+    self.selectButton.selected = model.isSelectHeader;
+}
 
 
 @end

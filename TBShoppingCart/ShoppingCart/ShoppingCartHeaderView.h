@@ -10,10 +10,11 @@
 
 typedef void(^selectBlock)(BOOL selected);
 
+@class ShoppingCartModel;
 @interface ShoppingCartHeaderView : UIView
 
 + (instancetype)creatHeaderViewWithFrame:(CGRect)frame name:(NSString *)name selectBlock:(selectBlock)selectBlock;
 
-@property(nonatomic,assign)BOOL select;
+@property(nonatomic,strong)ShoppingCartModel *model;
 
 @end

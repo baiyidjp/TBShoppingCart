@@ -142,9 +142,10 @@
         for (GoodsModel *goodModel in model.goodslist) {
             goodModel.isSelectCell = selected;
         }
-        headerView.select = selected;
+        model.isSelectHeader = selected;
         [_shopTableView reloadData];
     }];
+    headerView.model = model;
     return headerView;
 }
 
