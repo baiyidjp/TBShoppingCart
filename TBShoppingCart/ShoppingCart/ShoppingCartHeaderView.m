@@ -34,6 +34,7 @@
         self.frame = frame;
         self.name = name;
         self.selectBlock = selectBlock;
+        self.backgroundColor = [UIColor whiteColor];
         [self configViews];
     }
     return self;
@@ -48,6 +49,7 @@
     
     [self.selectButton setImage:[UIImage imageNamed:@"weixuanze"] forState:UIControlStateNormal];
     [self.selectButton setImage:[UIImage imageNamed:@"yixuanze"] forState:UIControlStateSelected];
+    self.selectButton.selected = self.select;
     [self.selectButton addTarget:self action:@selector(selectButton:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:self.selectButton];
@@ -67,8 +69,18 @@
 - (void)selectButton:(UIButton *)button{
 
     button.selected = !button.selected;
+    if (self.selectBlock) {
+        self.selectBlock(button.selected);
+    }
 }
 
+//- (void)setSelect:(BOOL)select{
+//
+//    _select = select;
+//    
+//    self.selectButton.selected = select;
+//
+//}
 
 
 @end

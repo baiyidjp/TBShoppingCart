@@ -29,17 +29,17 @@
     
     CGFloat nameX = CGRectGetMaxX(self.shopIconFrame)+KMARGIN;
     CGFloat nameY = KMARGIN/2;
-    CGSize nameSize = [goodsModel.name boundingRectWithSize:CGSizeMake(KWIDTH-CGRectGetMaxX(self.shopIconFrame)-2*KMARGIN, 50) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSMutableDictionary dictionaryWithObject:FONTSIZE(13) forKey:NSFontAttributeName] context:nil].size;
+    CGSize nameSize = [goodsModel.name boundingRectWithSize:CGSizeMake(KWIDTH-CGRectGetMaxX(self.shopIconFrame)-2*KMARGIN, 50) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSMutableDictionary dictionaryWithObject:FONTSIZE(12) forKey:NSFontAttributeName] context:nil].size;
     self.nameLabelFrame = CGRectMake(nameX, nameY, nameSize.width, nameSize.height);
     
     CGFloat descX = nameX;
     CGFloat descY = CGRectGetMaxY(self.nameLabelFrame)+KMARGIN/2;
-    CGSize descSize = [goodsModel.desc boundingRectWithSize:CGSizeMake(KWIDTH, 50) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSMutableDictionary dictionaryWithObject:FONTSIZE(13) forKey:NSFontAttributeName] context:nil].size;
+    CGSize descSize = [goodsModel.desc boundingRectWithSize:CGSizeMake(KWIDTH-CGRectGetMaxX(self.shopIconFrame)-2*KMARGIN, 50) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSMutableDictionary dictionaryWithObject:FONTSIZE(11) forKey:NSFontAttributeName] context:nil].size;
     self.descLabelFrame = CGRectMake(descX, descY, descSize.width, descSize.height);
     
     NSString *priceText = [NSString stringWithFormat:@"￥%@",goodsModel.price];
     CGFloat priceX = nameX;
-    CGSize priceSize = TEXTSIZEWITHFONT(priceText, FONTSIZE(15));
+    CGSize priceSize = TEXTSIZEWITHFONT(priceText, FONTSIZE(13));
     CGFloat priceY = CGRectGetMaxY(self.shopIconFrame)-priceSize.height;
     self.priceLabelFrame = CGRectMake(priceX, priceY, priceSize.width, priceSize.height);
     
@@ -47,7 +47,7 @@
         
         NSString *oripriceText = [NSString stringWithFormat:@"￥%@",goodsModel.originalprice];
         CGFloat originalPriceX = CGRectGetMaxX(self.priceLabelFrame)+KMARGIN/2;
-        CGSize originalPriceSize = TEXTSIZEWITHFONT(oripriceText, FONTSIZE(13));
+        CGSize originalPriceSize = TEXTSIZEWITHFONT(oripriceText, FONTSIZE(11));
         CGFloat originalPriceY = CGRectGetMaxY(self.shopIconFrame)-originalPriceSize.height;
         self.originalPriceFrame = CGRectMake(originalPriceX, originalPriceY, originalPriceSize.width, originalPriceSize.height);
         
@@ -55,7 +55,7 @@
     }
     
     NSString *text = [NSString stringWithFormat:@"x%@",goodsModel.shopcount];
-    CGSize countSize = TEXTSIZEWITHFONT(text, FONTSIZE(13));
+    CGSize countSize = TEXTSIZEWITHFONT(text, FONTSIZE(11));
     CGFloat countX = KWIDTH-KMARGIN-countSize.width;
     CGFloat countY = CGRectGetMaxY(self.shopIconFrame)-countSize.height;
     self.shopCountLabelFrame = CGRectMake(countX, countY, countSize.width, countSize.height);

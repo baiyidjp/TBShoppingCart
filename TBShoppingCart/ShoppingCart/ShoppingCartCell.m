@@ -13,6 +13,12 @@
 
 static NSString *reuseID = @"ShoppingCartCell";
 
+@interface ShoppingCartCell ()
+
+@property(nonatomic,copy)selectBlock selectBlock;
+
+@end
+
 @implementation ShoppingCartCell
 {
     UIView *_backgroundView;//整个cell的背景的View
@@ -25,20 +31,21 @@ static NSString *reuseID = @"ShoppingCartCell";
     UILabel *_shopCountLabel;//个数
     UIButton *_selectButton;
 }
-+ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView{
++ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectBlock)selectBlock{
     
     ShoppingCartCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseID];
     if (!cell) {
-        cell = [[ShoppingCartCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseID];
+        cell = [[ShoppingCartCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseID selectBlock:selectBlock];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier selectBlock:(selectBlock)selectBlock{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
+        self.selectBlock = selectBlock;
         [self addSubviews];
     }
     return self;
@@ -53,21 +60,23 @@ static NSString *reuseID = @"ShoppingCartCell";
     _iconImageView.backgroundColor = [UIColor redColor];
     
     _nameLabel = [[UILabel alloc]init];
-    [_nameLabel setFont:[UIFont systemFontOfSize:13]];
+    [_nameLabel setFont:[UIFont systemFontOfSize:12]];
+    [_nameLabel setNumberOfLines:0];
     
     _descLabel = [[UILabel alloc]init];
-    [_descLabel setFont:[UIFont systemFontOfSize:13]];
+    [_descLabel setFont:[UIFont systemFontOfSize:11]];
+    [_descLabel setNumberOfLines:0];
     
     _priceLabel = [[UILabel alloc]init];
-    [_priceLabel setFont:[UIFont systemFontOfSize:15]];
+    [_priceLabel setFont:[UIFont systemFontOfSize:13]];
     
     _oripriceLabel = [[UILabel alloc]init];
-    [_oripriceLabel setFont:[UIFont systemFontOfSize:13]];
+    [_oripriceLabel setFont:[UIFont systemFontOfSize:11]];
     
     _lineView = [[UIView alloc]init];
     
     _shopCountLabel = [[UILabel alloc]init];
-    [_shopCountLabel setFont:[UIFont systemFontOfSize:13]];
+    [_shopCountLabel setFont:[UIFont systemFontOfSize:11]];
     
     _selectButton = [[UIButton alloc]init];
     [_selectButton setImage:[UIImage imageNamed:@"weixuanze"] forState:UIControlStateNormal];
@@ -88,6 +97,9 @@ static NSString *reuseID = @"ShoppingCartCell";
 - (void)selectButton:(UIButton *)button{
     
     button.selected = !button.selected;
+    if (self.selectBlock) {
+        self.selectBlock(button.selected);
+    }
 }
 
 - (void)setGoodModelFrmae:(GoodsModelFrame *)goodModelFrmae{
@@ -120,6 +132,8 @@ static NSString *reuseID = @"ShoppingCartCell";
     _shopCountLabel.text = [NSString stringWithFormat:@"x%@",goodModelFrmae.goodsModel.shopcount];
     
     _selectButton.frame = goodModelFrmae.selectBtnFrame;
+    _selectButton.selected = goodModelFrmae.goodsModel.isSelectCell;
+    
 }
 
 

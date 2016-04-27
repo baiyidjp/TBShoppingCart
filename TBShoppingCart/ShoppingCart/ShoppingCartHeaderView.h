@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^selectBlock)();
+typedef void(^selectBlock)(BOOL selected);
 
 @interface ShoppingCartHeaderView : UIView
 
 + (instancetype)creatHeaderViewWithFrame:(CGRect)frame name:(NSString *)name selectBlock:(selectBlock)selectBlock;
+
+@property(nonatomic,assign)BOOL select;
 
 @end
