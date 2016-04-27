@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>shoppinglist</key>
+	<array>
+		<dict>
+			<key>shopname</key>
+			<string>耐克专卖</string>
+			<key>goodslist</key>
+			<array>
+				<dict>
+					<key>originalprice</key>
+					<string>2999</string>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>shopname</key>
+			<string>耐克专卖</string>
+			<key>goodslist</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>shopname</key>
+			<string>耐克专卖</string>
+			<key>goodslist</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>shopname</key>
+			<string>耐克专卖</string>
+			<key>goodslist</key>
+			<array>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>shopname</key>
+			<string>耐克专卖</string>
+			<key>goodslist</key>
+			<array>
+				<dict>
+					<key>originalprice</key>
+					<string>29999</string>
+					<key>name</key>
+					<string>科比第一代战靴 大减价 大减价</string>
+					<key>desc</key>
+					<string>是不是你梦寐以求的东西 ?</string>
+					<key>price</key>
+					<string>1999</string>
+					<key>shopcount</key>
+					<string>1</string>
+				</dict>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
