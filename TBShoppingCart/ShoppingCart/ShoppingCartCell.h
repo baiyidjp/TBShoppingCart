@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^selectCellBlock)(BOOL selected ,NSInteger selectCount ,NSIndexPath *cellIndexPath);
+typedef void(^selectCellBlock)(BOOL selected ,NSIndexPath *cellIndexPath);
 
 @class GoodsModelFrame;
 @interface ShoppingCartCell : UITableViewCell

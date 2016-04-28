@@ -30,7 +30,6 @@ static NSString *reuseID = @"ShoppingCartCell";
     UIView *_lineView;
     UILabel *_shopCountLabel;//个数
     UIButton *_selectButton;
-    NSInteger _selectCount;
 }
 + (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectCellBlock)selectBlock{
     
@@ -99,13 +98,8 @@ static NSString *reuseID = @"ShoppingCartCell";
     
     button.selected = !button.selected;
     
-    if (button.selected) {
-        _selectCount = 1;
-    }else{
-        _selectCount = -1;
-    }
     if (self.selectBlock) {
-        self.selectBlock(button.selected ,_selectCount,self.cellIndexPath);
+        self.selectBlock(button.selected ,self.cellIndexPath);
     }
 }
 
@@ -142,12 +136,6 @@ static NSString *reuseID = @"ShoppingCartCell";
     _selectButton.selected = goodModelFrmae.goodsModel.isSelectCell;
     
 }
-
-
-
-
-
-
 
 
 @end

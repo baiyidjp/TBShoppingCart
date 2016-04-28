@@ -27,18 +27,11 @@
     UITableView *_shopTableView;
     UIView *_bottomView;
     UIButton *_chooseBtn;
-    NSInteger _lastSelectSection;
-    NSInteger _cellSelectCount;
-    NSInteger _headerSelectCount;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-
     self.navigationItem.title = [NSString stringWithFormat:@"购物车(%zd)",self.dataArray.count];
-    
-    _cellSelectCount = 0;
-    _headerSelectCount = 0;
     
     [self configView];
 }
@@ -120,7 +113,6 @@
             goodModel.isSelectCell = button.selected;
         }
     }
-    _headerSelectCount = 0;
     [_shopTableView reloadData];
 
 }
@@ -142,40 +134,9 @@
     GoodsModelFrame *goodModelFrmae = [[GoodsModelFrame alloc]init];
     goodModelFrmae.goodsModel = goodModel;
     
-    ShoppingCartCell *cell = [ShoppingCartCell cellWithTableView:tableView selectBlock:^(BOOL selected ,NSInteger selectCount,NSIndexPath *cellIndexPath) {
-        NSLog(@"点击cell---%zd",selected);
-        ShoppingCartModel *model = self.dataArray[cellIndexPath.section];
-        GoodsModel *goodModel = model.goodslist[cellIndexPath.row];
+    ShoppingCartCell *cell = [ShoppingCartCell cellWithTableView:tableView selectBlock:^(BOOL selected,NSIndexPath *cellIndexPath) {
         
-        if (selected) {
-            
-            NSInteger nowSection = cellIndexPath.section;
-            if (!(nowSection == _lastSelectSection)) {
-                _cellSelectCount = 0;
-            }
-            
-            _cellSelectCount = _cellSelectCount + selectCount;
-            if (model.goodslist.count == _cellSelectCount) {
-                model.isSelectHeader = selected;
-                NSInteger headSelectCount = 0;
-                for (ShoppingCartModel *shopModel in self.dataArray) {
-                    if (!shopModel.isSelectHeader) {
-                        headSelectCount++;
-                    }
-                }
-                if (headSelectCount == 0) {
-                    _chooseBtn.selected = selected;
-                }
-            }
-        }else{
-            _cellSelectCount = _cellSelectCount + selectCount;
-            _chooseBtn.selected = selected;
-            model.isSelectHeader = selected;
-        }
-        goodModel.isSelectCell = selected;
-        _lastSelectSection = cellIndexPath.section;
-        NSLog(@"%zd",_cellSelectCount);
-        [_shopTableView reloadData];
+            [self selectCellWithSelect:selected cellIndexPath:cellIndexPath];
     }];
     
     cell.goodModelFrmae = goodModelFrmae;
@@ -187,29 +148,15 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     ShoppingCartModel *model = self.dataArray[section];
-    ShoppingCartHeaderView *headerView = [ShoppingCartHeaderView creatHeaderViewWithFrame:CGRectMake(0, 0, self.view.width, 30) name:model.shopname selectBlock:^(BOOL selected,NSInteger selectCount) {
-        NSLog(@"点击头选择--%zd",selected);
-        if (selected) {
-            _headerSelectCount = _headerSelectCount+selectCount;
-            if (_headerSelectCount == self.dataArray.count) {
-                _chooseBtn.selected = selected;
-            }
-        }else{
-            _headerSelectCount = _headerSelectCount+selectCount;
-            _chooseBtn.selected = selected;
-        }
-        for (GoodsModel *goodModel in model.goodslist) {
-            goodModel.isSelectCell = selected;
-        }
-        model.isSelectHeader = selected;
-        [_shopTableView reloadData];
-        _cellSelectCount = 0;
-        _lastSelectSection = section;
-    }];
+    ShoppingCartHeaderView *headerView = [ShoppingCartHeaderView creatHeaderViewWithFrame:CGRectMake(0, 0, self.view.width, 30) name:model.shopname selectBlock:^(BOOL selected) {
+        
+            [self selectHeaderViewWithSelect:selected model:model];
+        
+        }];
     headerView.model = model;
     return headerView;
 }
-//ceshi 
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 30;
 }
@@ -220,6 +167,70 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 102;
+}
+
+#pragma mark 点击cell的按钮
+- (void)selectCellWithSelect:(BOOL)selected cellIndexPath:(NSIndexPath *)cellIndexPath{
+    
+    NSLog(@"点击cell自定义-section-%zd row-%zd",cellIndexPath.section,cellIndexPath.row);
+    
+    ShoppingCartModel *model = self.dataArray[cellIndexPath.section];
+    GoodsModel *goodModel = model.goodslist[cellIndexPath.row];
+    
+    goodModel.isSelectCell = selected;//先将自身的点击状态改变
+    
+    NSInteger cellSelctCount = 0;
+    for (GoodsModel *cellModel in model.goodslist) {
+        if (!cellModel.isSelectCell) {
+            cellSelctCount++;//点击之后统计所有未点击的cell总数 若为0则全部选中
+        }
+    }
+    if (cellSelctCount == 0) {
+        model.isSelectHeader = YES;
+    }else{
+        model.isSelectHeader = NO;
+    }
+    
+    NSInteger headSelectCount = 0;
+    for (ShoppingCartModel *shopModel in self.dataArray) {
+        if (!shopModel.isSelectHeader) {
+            headSelectCount++;//直接分析点击后剩余的未被选中的 如果是0个就说明所有都被选中
+        }
+    }
+    if (headSelectCount == 0) {
+        _chooseBtn.selected = YES;
+    }else{
+        _chooseBtn.selected = NO;
+    }
+    [_shopTableView reloadData];
+}
+
+#pragma mark 点击组头的按钮
+- (void)selectHeaderViewWithSelect:(BOOL)selected model:(ShoppingCartModel *)model{
+ 
+    NSLog(@"点击头选择--%zd",selected);
+    
+    model.isSelectHeader = selected;
+    for (GoodsModel *goodModel in model.goodslist) {
+        goodModel.isSelectCell = selected;//当前组头下所有的cell的点击状态和组头保持一致
+    }
+    
+    if (selected) {
+        NSInteger headSelectCount = 0;
+        for (ShoppingCartModel *shopModel in self.dataArray) {
+            if (!shopModel.isSelectHeader) {
+                headSelectCount++;//直接分析点击后剩余的未被选中的 如果是0个就说明所有都被选中
+            }
+        }
+        if (headSelectCount == 0) {
+            _chooseBtn.selected = selected;
+        }
+    }else{
+        _chooseBtn.selected = selected;
+    }
+    
+    [_shopTableView reloadData];
+
 }
 
 @end

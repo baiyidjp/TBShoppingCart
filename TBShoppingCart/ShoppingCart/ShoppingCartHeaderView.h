@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^selectBlock)(BOOL selected ,NSInteger selectCount);
+typedef void(^selectBlock)(BOOL selected);
 
 @class ShoppingCartModel;
 @interface ShoppingCartHeaderView : UIView
