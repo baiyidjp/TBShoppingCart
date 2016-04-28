@@ -146,12 +146,14 @@
         NSLog(@"点击cell---%zd",selected);
         ShoppingCartModel *model = self.dataArray[cellIndexPath.section];
         GoodsModel *goodModel = model.goodslist[cellIndexPath.row];
+        
         if (selected) {
             
             NSInteger nowSection = cellIndexPath.section;
             if (!(nowSection == _lastSelectSection)) {
                 _cellSelectCount = 0;
             }
+            
             _cellSelectCount = _cellSelectCount + selectCount;
             if (model.goodslist.count == _cellSelectCount) {
                 model.isSelectHeader = selected;
@@ -172,6 +174,7 @@
         }
         goodModel.isSelectCell = selected;
         _lastSelectSection = cellIndexPath.section;
+        NSLog(@"%zd",_cellSelectCount);
         [_shopTableView reloadData];
     }];
     
@@ -201,11 +204,12 @@
         model.isSelectHeader = selected;
         [_shopTableView reloadData];
         _cellSelectCount = 0;
+        _lastSelectSection = section;
     }];
     headerView.model = model;
     return headerView;
 }
-
+//ceshi 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 30;
 }
