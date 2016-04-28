@@ -26,12 +26,19 @@
 {
     UITableView *_shopTableView;
     UIView *_bottomView;
+    UIButton *_chooseBtn;
+    NSInteger _lastSelectSection;
+    NSInteger _cellSelectCount;
+    NSInteger _headerSelectCount;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
 
     self.navigationItem.title = [NSString stringWithFormat:@"购物车(%zd)",self.dataArray.count];
+    
+    _cellSelectCount = 0;
+    _headerSelectCount = 0;
     
     [self configView];
 }
@@ -59,19 +66,19 @@
     _bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, self.view.height-44-49, self.view.width, 44)];
     _bottomView.backgroundColor = [UIColor whiteColor];
     
-    UIButton *btn = [[UIButton alloc]init];
-    [btn setImage:[UIImage imageNamed:@"weixuanze"] forState:UIControlStateNormal];
-    [btn setImage:[UIImage imageNamed:@"yixuanze"] forState:UIControlStateSelected];
-    btn.x = 10;
-    btn.size = CGSizeMake(20, 20);
-    btn.y = _bottomView.height/2-20/2;
-    [btn addTarget:self action:@selector(chooseAllShop:) forControlEvents:UIControlEventTouchUpInside];
-    [_bottomView addSubview:btn];
+     _chooseBtn = [[UIButton alloc]init];
+    [_chooseBtn setImage:[UIImage imageNamed:@"weixuanze"] forState:UIControlStateNormal];
+    [_chooseBtn setImage:[UIImage imageNamed:@"yixuanze"] forState:UIControlStateSelected];
+    _chooseBtn.x = 10;
+    _chooseBtn.size = CGSizeMake(20, 20);
+    _chooseBtn.y = _bottomView.height/2-20/2;
+    [_chooseBtn addTarget:self action:@selector(chooseAllShop:) forControlEvents:UIControlEventTouchUpInside];
+    [_bottomView addSubview:_chooseBtn];
     
     UILabel *label = [[UILabel alloc]init];
     label.text = @"全选";
     [label sizeToFit];
-    label.x = CGRectGetMaxX(btn.frame)+5;
+    label.x = CGRectGetMaxX(_chooseBtn.frame)+5;
     label.y = _bottomView.height/2 - label.height/2;
     label.textColor = [UIColor blackColor];
     [_bottomView addSubview:label];
@@ -107,6 +114,14 @@
 - (void)chooseAllShop:(UIButton *)button{
 
     button.selected = !button.selected;
+    for (ShoppingCartModel *model in self.dataArray) {
+        model.isSelectHeader = button.selected;
+        for (GoodsModel *goodModel in model.goodslist) {
+            goodModel.isSelectCell = button.selected;
+        }
+    }
+    _headerSelectCount = 0;
+    [_shopTableView reloadData];
 
 }
 
@@ -122,14 +137,46 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    ShoppingCartCell *cell = [ShoppingCartCell cellWithTableView:tableView selectBlock:^(BOOL selected) {
-        NSLog(@"点击cell---%zd",selected);
-    }];
     ShoppingCartModel *model = self.dataArray[indexPath.section];
     GoodsModel *goodModel = model.goodslist[indexPath.row];
     GoodsModelFrame *goodModelFrmae = [[GoodsModelFrame alloc]init];
     goodModelFrmae.goodsModel = goodModel;
+    
+    ShoppingCartCell *cell = [ShoppingCartCell cellWithTableView:tableView selectBlock:^(BOOL selected ,NSInteger selectCount,NSIndexPath *cellIndexPath) {
+        NSLog(@"点击cell---%zd",selected);
+        ShoppingCartModel *model = self.dataArray[cellIndexPath.section];
+        GoodsModel *goodModel = model.goodslist[cellIndexPath.row];
+        if (selected) {
+            
+            NSInteger nowSection = cellIndexPath.section;
+            if (!(nowSection == _lastSelectSection)) {
+                _cellSelectCount = 0;
+            }
+            _cellSelectCount = _cellSelectCount + selectCount;
+            if (model.goodslist.count == _cellSelectCount) {
+                model.isSelectHeader = selected;
+                NSInteger headSelectCount = 0;
+                for (ShoppingCartModel *shopModel in self.dataArray) {
+                    if (!shopModel.isSelectHeader) {
+                        headSelectCount++;
+                    }
+                }
+                if (headSelectCount == 0) {
+                    _chooseBtn.selected = selected;
+                }
+            }
+        }else{
+            _cellSelectCount = _cellSelectCount + selectCount;
+            _chooseBtn.selected = selected;
+            model.isSelectHeader = selected;
+        }
+        goodModel.isSelectCell = selected;
+        _lastSelectSection = cellIndexPath.section;
+        [_shopTableView reloadData];
+    }];
+    
     cell.goodModelFrmae = goodModelFrmae;
+    cell.cellIndexPath = indexPath;
     return cell;
 
 }
@@ -137,13 +184,23 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     
     ShoppingCartModel *model = self.dataArray[section];
-    ShoppingCartHeaderView *headerView = [ShoppingCartHeaderView creatHeaderViewWithFrame:CGRectMake(0, 0, self.view.width, 30) name:model.shopname selectBlock:^(BOOL selected) {
+    ShoppingCartHeaderView *headerView = [ShoppingCartHeaderView creatHeaderViewWithFrame:CGRectMake(0, 0, self.view.width, 30) name:model.shopname selectBlock:^(BOOL selected,NSInteger selectCount) {
         NSLog(@"点击头选择--%zd",selected);
+        if (selected) {
+            _headerSelectCount = _headerSelectCount+selectCount;
+            if (_headerSelectCount == self.dataArray.count) {
+                _chooseBtn.selected = selected;
+            }
+        }else{
+            _headerSelectCount = _headerSelectCount+selectCount;
+            _chooseBtn.selected = selected;
+        }
         for (GoodsModel *goodModel in model.goodslist) {
             goodModel.isSelectCell = selected;
         }
         model.isSelectHeader = selected;
         [_shopTableView reloadData];
+        _cellSelectCount = 0;
     }];
     headerView.model = model;
     return headerView;

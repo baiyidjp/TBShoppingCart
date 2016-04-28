@@ -20,7 +20,9 @@
 @end
 
 @implementation ShoppingCartHeaderView
-
+{
+    NSInteger _selectCount;
+}
 
 + (instancetype)creatHeaderViewWithFrame:(CGRect)frame name:(NSString *)name selectBlock:(selectBlock)selectBlock{
 
@@ -69,8 +71,13 @@
 - (void)selectButton:(UIButton *)button{
 
     button.selected = !button.selected;
+    if (button.selected) {
+        _selectCount = 1;
+    }else{
+        _selectCount = -1;
+    }
     if (self.selectBlock) {
-        self.selectBlock(button.selected);
+        self.selectBlock(button.selected,_selectCount);
     }
 }
 

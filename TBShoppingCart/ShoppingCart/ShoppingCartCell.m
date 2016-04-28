@@ -15,7 +15,7 @@ static NSString *reuseID = @"ShoppingCartCell";
 
 @interface ShoppingCartCell ()
 
-@property(nonatomic,copy)selectBlock selectBlock;
+@property(nonatomic,copy)selectCellBlock selectBlock;
 
 @end
 
@@ -30,8 +30,9 @@ static NSString *reuseID = @"ShoppingCartCell";
     UIView *_lineView;
     UILabel *_shopCountLabel;//个数
     UIButton *_selectButton;
+    NSInteger _selectCount;
 }
-+ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectBlock)selectBlock{
++ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectCellBlock)selectBlock{
     
     ShoppingCartCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseID];
     if (!cell) {
@@ -41,7 +42,7 @@ static NSString *reuseID = @"ShoppingCartCell";
     return cell;
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier selectBlock:(selectBlock)selectBlock{
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier selectBlock:(selectCellBlock)selectBlock{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
@@ -97,8 +98,14 @@ static NSString *reuseID = @"ShoppingCartCell";
 - (void)selectButton:(UIButton *)button{
     
     button.selected = !button.selected;
+    
+    if (button.selected) {
+        _selectCount = 1;
+    }else{
+        _selectCount = -1;
+    }
     if (self.selectBlock) {
-        self.selectBlock(button.selected);
+        self.selectBlock(button.selected ,_selectCount,self.cellIndexPath);
     }
 }
 

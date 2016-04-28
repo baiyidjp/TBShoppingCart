@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^selectBlock)(BOOL selected);
+typedef void(^selectCellBlock)(BOOL selected ,NSInteger selectCount ,NSIndexPath *cellIndexPath);
 
 @class GoodsModelFrame;
 @interface ShoppingCartCell : UITableViewCell
 
-+ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectBlock)selectBlock;
++ (ShoppingCartCell *)cellWithTableView:(UITableView *)tableView selectBlock:(selectCellBlock)selectBlock;
 
 @property(nonatomic,strong)GoodsModelFrame *goodModelFrmae;
-
+@property(nonatomic,strong)NSIndexPath *cellIndexPath;
 
 @end
