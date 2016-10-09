@@ -27,6 +27,7 @@
     UITableView *_shopTableView;
     UIView *_bottomView;
     UIButton *_chooseBtn;
+    UILabel *_priceLabel;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -83,15 +84,15 @@
     [redBtn.titleLabel setFont:[UIFont systemFontOfSize:13]];
     [_bottomView addSubview:redBtn];
     
-    UILabel *priceLabel = [[UILabel alloc]init];
-    priceLabel.text = @"合计:￥0.00";
-    priceLabel.font = [UIFont systemFontOfSize:15];
-    priceLabel.textAlignment = NSTextAlignmentRight;
-    [priceLabel sizeToFit];
-    priceLabel.size = CGSizeMake(priceLabel.size.width*2, priceLabel.size.height);
-    priceLabel.x = CGRectGetMinX(redBtn.frame)-5-priceLabel.width;
-    priceLabel.y = _bottomView.height/2-priceLabel.height-2;
-    [_bottomView addSubview:priceLabel];
+    _priceLabel = [[UILabel alloc]init];
+    _priceLabel.text = @"合计:￥0.00";
+    _priceLabel.font = [UIFont systemFontOfSize:15];
+    _priceLabel.textAlignment = NSTextAlignmentRight;
+    [_priceLabel sizeToFit];
+    _priceLabel.size = CGSizeMake(_priceLabel.size.width*2, _priceLabel.size.height);
+    _priceLabel.x = CGRectGetMinX(redBtn.frame)-5-_priceLabel.width;
+    _priceLabel.y = _bottomView.height/2-_priceLabel.height-2;
+    [_bottomView addSubview:_priceLabel];
     
     UILabel *tipLabel = [[UILabel alloc]init];
     tipLabel.font = [UIFont systemFontOfSize:13];
@@ -107,14 +108,16 @@
 - (void)chooseAllShop:(UIButton *)button{
 
     button.selected = !button.selected;
+    CGFloat price = 0;
     for (ShoppingCartModel *model in self.dataArray) {
         model.isSelectHeader = button.selected;
         for (GoodsModel *goodModel in model.goodslist) {
             goodModel.isSelectCell = button.selected;
+            price += [goodModel.price floatValue];
         }
     }
     [_shopTableView reloadData];
-
+    [self changePrice:button.selected?price:0];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -231,6 +234,11 @@
     
     [_shopTableView reloadData];
 
+}
+
+- (void)changePrice:(CGFloat)price{
+    
+    _priceLabel.text = [NSString stringWithFormat:@"合计:￥%.2f",price];
 }
 
 @end

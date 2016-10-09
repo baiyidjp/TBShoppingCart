@@ -60,24 +60,48 @@
 }
 - (void)configChildCtrl{
 
-    for (int i = 0; i < self.titleArray.count; i++) {
+    for (NSInteger i = 0; i < self.titleArray.count; i++) {
         
-        [self creatChildCtrlWithTitle:self.titleArray[i] icon:self.iconArray[i] ctrl:self.ctrlArray[i]];
+        [self creatChildCtrlWithTitle:self.titleArray[i] icon:self.iconArray[i] ctrl:self.ctrlArray[i] tag:i];
     }
     
 }
 
-- (void)creatChildCtrlWithTitle:(NSString *)title icon:(NSString *)iconName ctrl:(UIViewController *)ctrl{
+- (void)creatChildCtrlWithTitle:(NSString *)title icon:(NSString *)iconName ctrl:(UIViewController *)ctrl tag:(NSInteger)tag{
     
     ctrl.title = title;
     ctrl.tabBarItem.title = title;
     ctrl.tabBarItem.image = [UIImage imageNamed:iconName];
-    
+    ctrl.tabBarItem.tag = tag;
     UINavigationController *navCtrl = [[UINavigationController alloc]initWithRootViewController:ctrl];
     [self addChildViewController:navCtrl];
     
 }
 
-
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+    
+    NSInteger index = [self.tabBar.items indexOfObject:item];
+    NSMutableArray * tabbarbuttonArray = [NSMutableArray array];
+    for (UIView *tabBarButton in self.tabBar.subviews) {
+        if ([tabBarButton isKindOfClass:NSClassFromString(@"UITabBarButton")]) {
+            [tabbarbuttonArray addObject:tabBarButton];
+        }
+    }
+    CABasicAnimation *shakeAnimation = [CABasicAnimation animationWithKeyPath:@"transform.translation.y"];
+    shakeAnimation.duration = 0.25f;
+    shakeAnimation.fromValue = [NSNumber numberWithFloat:-5];
+    shakeAnimation.toValue = [NSNumber numberWithFloat:5];
+    shakeAnimation.autoreverses = YES;
+    [[tabbarbuttonArray[index] layer] addAnimation:shakeAnimation forKey:nil];
+    
+//    CABasicAnimation*pulse = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+//    pulse.timingFunction= [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//    pulse.duration = 0.08;
+//    pulse.repeatCount= 1;
+//    pulse.autoreverses= YES;
+//    pulse.fromValue= [NSNumber numberWithFloat:0.7];
+//    pulse.toValue= [NSNumber numberWithFloat:1.3];
+//    [[tabbarbuttonArray[index] layer] addAnimation:pulse forKey:nil];
+}
 
 @end
